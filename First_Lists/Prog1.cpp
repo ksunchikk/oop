@@ -233,4 +233,28 @@ namespace First
 			a = a->next;
 		}
 	}
+	int getNut(int& a, const char* msg) {
+		const char* pr = "";
+		do {
+			std::cout << pr << std::endl;
+			std::cout << msg;
+			pr = "You are wrong; repeat please!";
+			if (getNum(a) < 0) {
+				return -1;
+			}
+		} while (a < 1);
+	}
+	double getEl(double& a) {
+		const char* pr = "";
+		do {
+			std::cout << pr;
+			std::cout << "Element number->";
+			pr = "You enter 0. Try again.";
+			if (getNum(a) < 0) {
+				return -1;
+			}
+		} while (a == 0);
+		std::cout << std::endl;
+		return 1;
+	}
 }
