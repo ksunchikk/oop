@@ -66,7 +66,7 @@ namespace First
 			if (ptr != nullptr) {
 				ptr = serch_min(ptr, min_index, min, k, r);
 				res->k = k;
-				if ((ptr->k < c) && (min > 0)) {//проверка на нули в конце, если все предыдущие были без дырок. если первый ноль в конце, то в строку не записываем ничего
+				if ((ptr->k < c) && (min > 0)) {
 					res->k = c - r - 1;
 					res->num = nullptr;
 				}
@@ -79,9 +79,14 @@ namespace First
 				min_index = 0, min = 0;
 				res->next = new line;
 				res->next->k = 0;
-				res = res->next;
 			}
 			a = a->next;
+			if (a) {
+				res = res->next;
+			}
+			else {
+				res->next = nullptr;
+			}
 		}
 		return result;
 	}
@@ -192,10 +197,14 @@ namespace First
 				else {//следующего нет
 					if (ptr->k < cr) {
 						ptr->next = new_element(ptr->next, cr, recnum);
-						delete tmp;}
+						delete tmp;
+						break;
+					}
 					else {
 						tmp->next = ptr;
-						ptr1->num = tmp;}
+						ptr1->num = tmp;
+						break;
+					}
 				}
 				ptr = ptr->next;
 			}
