@@ -6,10 +6,10 @@ namespace First
 	line* erase(line*& lines, int m)
 	{
 		line** ptr1 = &lines;
-		while(*ptr1!=nullptr) {
+		while (*ptr1 != nullptr) {
 			element** ptr = &(*ptr1)->num;
 			element* tmp = nullptr;
-			while(*ptr!=nullptr){
+			while (*ptr != nullptr) {
 				tmp = *ptr;
 				*ptr = (*ptr)->next;
 				delete tmp;
@@ -25,14 +25,14 @@ namespace First
 	{
 		line* lines = nullptr;
 		int m, c, k = 0, lr = 0, cr = 0;
-		if (getNut(m, "Enter number of lines: -> ") < 0) {return nullptr;}
+		if (getNut(m, "Enter number of lines: -> ") < 0) { return nullptr; }
 		if (getNut(c, "Enter number of columns: -> ") < 0) { return nullptr; }
 		do {//заполнение строк
 			std::cout << "If you want to add new elements at the line enter 0. If not enter another number ->";
 			getNum(k);
 			if (k == 0) {//хочет добавить
-			    double recnum = 0, rec = 0;
-			    std::cout << "Enter number of matrix line ->";//выбор строки дл€ добавлени€
+				double recnum = 0, rec = 0;
+				std::cout << "Enter number of matrix line ->";//выбор строки дл€ добавлени€
 				getNum(lr);
 				if (lr <= m && lr > 0) {
 					line* ptr1 = input_line(lines, lr);
@@ -47,7 +47,7 @@ namespace First
 						if (cr <= c && cr > 0) {//если больше нул€ - ввод значени€, если меньше или равно - выход из ввода в строку, если больше количества столбцов - Incorrect number
 							ptr1 = input_element(ptr1, cr, recnum);
 						}
-					} while (cr>0);
+					} while (cr > 0);
 				}
 				else { std::cout << "Incorrect number" << std::endl; }
 			}
@@ -55,13 +55,13 @@ namespace First
 		resl = m, resc = c;
 		return lines;
 	}
-	line* res_matrix(int m, int c,line* lines) {
+	line* res_matrix(int m, int c, line* lines) {
 		line* result = new line;
 		result->k = 0;
 		int min_index = 0, r = 0, k = 0;
 		double min = 0;
-		line* a = lines, *res = result;
-		while(a != nullptr) {
+		line* a = lines, * res = result;
+		while (a != nullptr) {
 			element* ptr = a->num;
 			if (ptr != nullptr) {
 				ptr = serch_min(ptr, min_index, min, k, r);
@@ -72,12 +72,11 @@ namespace First
 				}
 				else {
 					element* tmp = a->num;
-					while (tmp->k != min_index) {tmp = tmp->next;}
+					while (tmp->k != min_index) { tmp = tmp->next; }
 					res->num = tmp;
 					res->n = a->n;
 				}
-				min_index = 0;
-				min = 0;
+				min_index = 0, min = 0;
 				res->next = new line;
 				res->next->k = 0;
 				res = res->next;
@@ -87,16 +86,7 @@ namespace First
 		return result;
 	}
 	element* serch_min(element* ptr, int& min_index, double& min, int& k, int& r) {
-		if (ptr->k > 1) {//провер€ем на первые нули. если они есть, то min=0, индекс от первого элемента
-			min_index = ptr->k;
-			min = 0;
-			k = ptr->k - 1;
-		}
-		else {//если нет, то индекс 1, минимум = значению первого
-			min = ptr->num;
-			min_index = ptr->k;
-			k = 0;
-		}
+		first_zero(ptr, min_index, min, k);
 		while (ptr != nullptr && ptr->next != nullptr) {//пробегаем по списку сущ.элементов
 			if (ptr->num < min) {//если меньше минимума, новый минимум и индекс
 				min_index = ptr->k;
@@ -120,6 +110,18 @@ namespace First
 		}
 		return ptr;
 	}
+	void first_zero(element* ptr, int& min_index, double& min, int& k) {
+		if (ptr->k > 1) {
+			min_index = ptr->k;
+			min = 0;
+			k = ptr->k - 1;
+		}
+		else {
+			min = ptr->num;
+			min_index = ptr->k;
+			k = 0;
+		}
+	}
 	line* input_line(line*& lines, int lr) {
 		line* ptr = lines;
 		line* tmp = nullptr;
@@ -138,7 +140,7 @@ namespace First
 						tmp->next = ptr;
 						lines = tmp;
 						break;}
-				}
+	                }
 				else {//следующего нет
 					if (ptr->n < lr) {
 						ptr->next = new_line(ptr->next, lr);
@@ -157,39 +159,22 @@ namespace First
 		return lines;
 	}
 	line* new_line(line*& a, int lr) {
-		 a = new line;
-		 a->num = nullptr;
-		 a->n = lr;
-		 a->k = 0;
-		 a->next = nullptr;
+		a = new line;
+		a->num = nullptr;
+		a->n = lr;
+		a->k = 0;
+		a->next = nullptr;
 		return a;
 	}
-	element* new_element(element*& tmp, int cr, double recnum) {
-		try {//выдел€ем пам€ть под новый элемент и инициализируем его введенными значени€ми
-			tmp = new element;;
-		}
-		catch (std::bad_alloc& ba)
-		{
-			std::cout << "----Ч too many elements in matrix: " << ba.what() << std::endl;
-			delete tmp;
-			return nullptr;
-		}
-		tmp->k = cr;
-		tmp->num = recnum;
-		tmp->next = nullptr;
-		return tmp;
-	}
 	line* input_element(line*& ptr1, int cr, double recnum) {
-		element* ptr = ptr1->num;
+		element* ptr = ptr1->num, * tmp = nullptr;
 		int rec = 0;
 		getEl(recnum);
-		std::cout << std::endl;
-		element* tmp = nullptr;
 		new_element(tmp, cr, recnum);
 		if (ptr != NULL) {
 			while (ptr != nullptr) {//провер€ем строку на пустоту при первой иттерации, и на конец строки при последующих, пробега€сь по списку элементов
 				if (ptr->k == cr) {//нашелс€ элемент с таким номером. ¬ зависимости от решени€ пользовател€ либо замен€ем, либо пропускаем
-					std::cout << "There's element with another number. Do you want to change it? Enter 0 to change and 1 to continue unchanged" << std::endl; 
+					std::cout << "There's element with another number. Do you want to change it? Enter 0 to change and 1 to continue unchanged" << std::endl;
 					getNum(rec);
 					if (rec == 0) { ptr->num = recnum; }
 					delete tmp;
@@ -217,44 +202,35 @@ namespace First
 		}
 		else {//первый элемент в строке
 			ptr1->num = new_element(ptr1->num, cr, recnum);
-			delete tmp;
-		}
+			delete tmp;}
 		return ptr1;
 	}
-	void output(const char* msg, line* a, int m) {
+	element* new_element(element*& tmp, int cr, double recnum) {
+		try {//выдел€ем пам€ть под новый элемент и инициализируем его введенными значени€ми
+			tmp = new element;;
+		}
+		catch (std::bad_alloc& ba)
+		{
+			std::cout << "----Ч too many elements in matrix: " << ba.what() << std::endl;
+			delete tmp;
+			return nullptr;
+		}
+		tmp->k = cr;
+		tmp->num = recnum;
+		tmp->next = nullptr;
+		return tmp;
+	}
+	void output(const char* msg, line* a) {
 		int i, j;
 		std::cout << msg << ":\n";
-	    while (a!=nullptr) {
+		while (a != nullptr) {
 			element* ptr = a->num;
 			while (ptr != nullptr) {
-				std::cout << "["<< a->n << "," << ptr->k<<"]" << " "<<"{"<< ptr->num <<"}" << " " ;
+				std::cout << "[" << a->n << "," << ptr->k << "]" << " " << "{" << ptr->num << "}" << " ";
 				ptr = ptr->next;
 			}
 			std::cout << std::endl;
 			a = a->next;
 		}
-	}
-	int getNut(int& a, const char* msg) {
-		const char* pr = "";
-		do {
-			std::cout << pr << std::endl;
-			std::cout << msg;
-			pr = "You are wrong; repeat please!";
-			if (getNum(a) < 0) {
-				return -1;
-			}
-		} while (a < 1);
-	}
-	double getEl(double& a) {
-		const char* pr = "";
-		do {
-			std::cout << pr;
-			std::cout << "Element number->";
-			pr = "You enter 0. Try again.";
-			if (getNum(a) < 0) {
-				return -1;
-			}
-		} while (a == 0);
-		return 1;
 	}
 }
