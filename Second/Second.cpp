@@ -6,9 +6,7 @@ double const PI = 3.141592;
 
 namespace Second {
 	Lemniscate::Lemniscate(double focus) {
-		if (focus == 0)
-			throw std::exception("Invalid focus");
-		f = abs(focus);
+		this->setFocus(focus);
 	}
 
 	Lemniscate& Lemniscate::setFocus(double focus) {
