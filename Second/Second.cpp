@@ -1,5 +1,5 @@
 ﻿#include "Lemniscate.h"
-#include <strstream>
+#include <sstream>
 #include <stdio.h>
 #include <string.h>
 double const PI = 3.141592;
@@ -74,14 +74,11 @@ namespace Second {
 			throw std::exception("Invalid radius");
 		return 2 * f * f /( 3 * rad);
 	}
-	char* Lemniscate::formula() const {
-		const char* s1 = " (x ^ 2 + y ^ 2) ^ 2 = 2 *  ^ 2 * (x ^ 2 - y ^ 2)";
-		int l = strlen(s1) + 1;
-		char num[20];
-		sprintf_s(num, 20, "%.2f", f);
-		l += strlen(num);
-		char* s = new char[l];
-		sprintf_s(s, l, "(x ^ 2 + y ^ 2) ^ 2 = 2 * %.2f ^ 2 * (x ^ 2 - y ^ 2)", f);
-		return s;
+	std::string Lemniscate::formula() const {
+	    char* s1;
+		std::stringstream ss;
+		ss << " (x ^ 2 + y ^ 2) ^ 2 = 2 * " << f << "^ 2 * (x ^ 2 - y ^ 2)";
+		//sprintf_s(s, l, "(x ^ 2 + y ^ 2) ^ 2 = 2 * %.2f ^ 2 * (x ^ 2 - y ^ 2)", f);
+		return ss.str();
 	}
 }

@@ -1,6 +1,7 @@
 #ifndef LEMNISCATE_H_
 #define LEMNISCATE_H_
 #include <math.h>
+#include <sstream>
 
 namespace Second {
 	class Lemniscate{
@@ -13,7 +14,7 @@ namespace Second {
 		double focusdist() const { return 2 * f; };
 		double rad() const { return sqrt(2) * f; };
 		double polardist(double ang) const;
-		char* formula() const;
+		std::string formula() const;
 		double S() const { return 2 * (f * f); };
 		double radAngle(double ang) const;
 		double radRad(double rad) const;
