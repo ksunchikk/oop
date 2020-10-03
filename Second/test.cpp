@@ -15,7 +15,7 @@ TEST(LemniscateConstructor, InitConstructor) {
     ASSERT_EQ(3, f1.getFocus());
     ASSERT_ANY_THROW(Second::Lemniscate f(0));
 }
-TEST(LemniscateMethods, InitConstructor) {
+TEST(LemniscateMethods, Setters) {
     Second::Lemniscate f;
     f.setFocus(5);
     ASSERT_EQ(5, f.getFocus());
@@ -54,10 +54,10 @@ TEST(LemniscateMethods, S) {
     ASSERT_NEAR(18, f.S(), error);
 }
 TEST(LemniscateMethods, formula) {
-    Second::Lemniscate f(5);
-    ASSERT_STREQ("(x ^ 2 + y ^ 2) ^ 2 = 2 * 5.00 ^ 2 * (x ^ 2 - y ^ 2)", f.formula());
-    f.setFocus(-5);
-    ASSERT_STREQ("(x ^ 2 + y ^ 2) ^ 2 = 2 * 5.00 ^ 2 * (x ^ 2 - y ^ 2)", f.formula());
+   Second::Lemniscate f(5);
+   ASSERT_STRCASEEQ(" (x ^ 2 + y ^ 2) ^ 2 = 2 * 5^ 2 * (x ^ 2 - y ^ 2)", f.formula().c_str());
+   f.setFocus(-5);
+   ASSERT_STRCASEEQ(" (x ^ 2 + y ^ 2) ^ 2 = 2 * 5^ 2 * (x ^ 2 - y ^ 2)", f.formula().c_str());
 }
 //
 int _tmain(int argc, char* argv[]) {
