@@ -15,13 +15,14 @@ namespace Prog3a {
 		BigInt& Set(const char* str); 
 		BigInt Inc() const;
 		BigInt Dec() const;
-		const BigInt Dopcode() const;
-		int Large(BigInt& t) const;
-		BigInt Summa(BigInt& t) const;
+		const BigInt AddCode() const;
+		bool Large(const BigInt& t) const;
+		BigInt Sum(const BigInt& t) const;
 		BigInt Subtraction(BigInt) const;
 		BigInt InputStr() const;
 		void Print() const;
 	};
+	
 }
 #endif
 

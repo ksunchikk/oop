@@ -17,7 +17,7 @@ using namespace Prog3a;
 			s=s.InputStr();
 			std::cout<< std::endl;
 			try {
-				BigInt Sum(f.Summa(s));
+				BigInt Sum(f.Sum(s));
 				f.Print();
 				std::cout << "+(";
 				s.Print();
