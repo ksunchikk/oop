@@ -1,6 +1,6 @@
 ﻿#include <iostream>
-#include "BigInt.h"
-using namespace Prog3a;
+#include "BigInt_b.h"
+using namespace Prog3b;
 
 int main() {
 	BigInt f, s;
@@ -8,32 +8,23 @@ int main() {
 	while (id) {
 		std::cout << "Enter first big integer" << std::endl;
 		std::cout << "First: ";
-		f = f.InputStr();
+		std::cin >> f;
 		std::cout << std::endl;
 		std::cout << "Enter second big integer" << std::endl;
 		std::cout << "Second: ";
-		s = s.InputStr();
+		std::cin >> s;
 		std::cout << std::endl;
 		try {
-			BigInt Sum(f.Sum(s));
-			f.Print();
-			std::cout << "+(";
-			s.Print();
-			std::cout << ")=";
-			Sum.Print();
-			std::cout << std::endl;
+			BigInt Sum = f + s;
+			std::cout << f << "+(" << s << ")=" << Sum << std::endl;
 		}
 		catch (const std::exception& msg) {
 			std::cout << msg.what() << std::endl;
 		}
 		try {
-			BigInt Sub(f.Subtraction(s));
-			f.Print();
-			std::cout << "-(";
-			s.Print();
-			std::cout << ")=";
-			Sub.Print();
-			std::cout << std::endl;
+			BigInt Sub = f - s;
+			std::cout << f << "-(" << s << ")=" << Sub << std::endl;
+			std::cout << Sub << std::endl;
 		}
 		catch (const std::exception& msg) {
 			std::cout << msg.what() << std::endl;
@@ -42,39 +33,39 @@ int main() {
 		std::cin >> id;
 		if (!id) {
 			try {
-				BigInt f1 = f.Inc();
-				std::cout << "Recived number: ";
-				f1.Print();
-				std::cout << std::endl;
+				int x = 1;
+				BigInt f1=f;
+				f1 <<= x;
+				std::cout << "Recived number: " << f1 << std::endl;
 			}
 			catch (const std::exception& msg) {
 				std::cout << msg.what() << std::endl;
 			}
 		}
 		else {
-			BigInt f1 = f.Dec();
-			std::cout << "Recived number: ";
-			f1.Print();
-			std::cout << std::endl;
+			int x = 1;
+			BigInt f1 = f;
+			f1 >>= x;
+			std::cout << "Recived number: " << f1 << std::endl;
 		}
 		std::cout << "Enter 0 to increase second number or 1 to decrease" << std::endl;
 		std::cin >> id;
 		if (!id) {
 			try {
-				BigInt s1 = s.Inc();
-				std::cout << "Recived number: ";
-				s1.Print();
-				std::cout << std::endl;
+				int x = 1;
+				BigInt s1 = s;
+				s1 <<= x;
+				std::cout << "Recived number: " << s1 << std::endl;
 			}
 			catch (const std::exception& msg) {
 				std::cout << msg.what() << std::endl;
 			}
 		}
 		else {
-			BigInt s1 = s.Dec();
-			std::cout << "Recived number: ";
-			s1.Print();
-			std::cout << std::endl;
+			int x = 1;
+			BigInt s1 = s;
+			s1 >>= x;
+			std::cout << "Recived number: " << s1 << std::endl;
 		}
 		std::cout << "Enter 0 to exit or 1 to continue: ";
 		std::cin >> id;
@@ -82,4 +73,3 @@ int main() {
 	}
 	return 0;
 }
-

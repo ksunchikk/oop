@@ -1,10 +1,10 @@
-#include "BigInt.h"
+#include "BigInt_b.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
 
-namespace Prog3a {
+namespace Prog3b {
 
 	BigInt::BigInt()
 	{
@@ -15,6 +15,7 @@ namespace Prog3a {
 	BigInt::BigInt(long int x) {
 		try {
 			long int a = abs(x);
+			n = 0;
 			while (a) {
 				++n;
 				a /= 10;
@@ -23,11 +24,12 @@ namespace Prog3a {
 			else Int[0] = 0;
 			if (n > SZ)
 				throw "Overflow";
+			a = x;
 			for (int i = 1; i <= n; i++) {
 				Int[i] = (a % 10);
 				a /= 10;
 			}
-			for (int i = SZ; i >= SZ - n + 1; i--)
+			for (int i = SZ; i >= (n + 1); i--)
 				Int[i] = 0;
 		}
 		catch (const std::exception& msg) {
@@ -44,10 +46,9 @@ namespace Prog3a {
 	}
 	BigInt& BigInt::Set(const char* str) {
 		try {
-			std::string STR = str;
 			if (str == nullptr)
 				throw "Nullptr";
-			int l = STR.std::string::length();
+			int l = strlen(str);
 			n = l;
 			int z = 0;
 			if (str[0] == '-') {
@@ -56,8 +57,8 @@ namespace Prog3a {
 				n--;
 			}
 			else Int[0] = 0;
-			int pr1 = STR.std::string::find_first_not_of("0123456789");
-			if (pr1 > 0) {
+			int pr1 = strspn(str,"0123456789");
+			if (pr1 != l) {
 				Int[0] = 0;
 				throw "Incorrect data. Your number can begin only from - or 0-9 chars and contain 0-9 chars";
 			}
@@ -80,8 +81,15 @@ namespace Prog3a {
 		}
 		return *this;
 	}
-
-	const BigInt BigInt::AddCode() const {
+	BigInt BigInt::operator ()(long int x) const {
+		BigInt a(x);
+		return a;
+	}
+	BigInt BigInt::operator ()(const char* str) const {
+		BigInt a(str);
+		return a;
+	}
+	const BigInt BigInt::operator~() const {
 		BigInt a;
 		if (Int[0] == 0)
 			return *this;
@@ -98,24 +106,52 @@ namespace Prog3a {
 		a.Int[0] = 0;
 		return a;
 	}
-	bool BigInt::Large(const BigInt& t) const {
-		if (n > t.n) return true;
-		if (t.n > n) return false;
-		if (t.n == n) {
-			for (int i = n; i >= 1; i--) {
-				if (Int[i] > t.Int[i]) return true;
-				if (t.Int[i] > Int[i]) return false;
+	BigInt BigInt::operator -() const {
+		BigInt neg = *this;
+			if ((n == 1 && Int[1]!=0)||(n!=1)) {
+				neg.Int[0] = Int[0] == 0 ? 1 : 0;
+			}
+		neg.n = n;
+		return neg;
+	}
+    bool operator >(const BigInt& first, const BigInt& second) {
+		if (first.n > second.n) return true;
+		if (first.n > second.n) return false;
+		if (second.n == first.n) {
+			for (int i = first.n; i >= 1; i--) {
+				if (first.Int[i] > second.Int[i]) return true;
+				if (second.Int[i] > first.Int[i]) return false;
 			}
 		}
+		return false;
 	}
-	BigInt BigInt::Sum(const BigInt& t)const
-	{
+    bool operator <(const BigInt& first, const BigInt& second) {
+			if (first.n < second.n) return true;
+			if (first.n < second.n) return false;
+			if (second.n == first.n) {
+				for (int i = first.n; i >= 1; i--) {
+					if (first.Int[i] < second.Int[i]) return true;
+					if (second.Int[i] < first.Int[i]) return false;
+				}
+			}
+			return false;
+		}
+	bool operator ==(const BigInt& first, const BigInt& second) {
+			if (first.n != second.n) return false;
+			if (second.n == first.n) {
+				for (int i = first.n; i >= 1; i--) {
+					if (first.Int[i] != second.Int[i]) return false;
+				}
+			}
+			return true;
+		}
+	BigInt operator +(const BigInt& fir, const BigInt& sec){
 		try {
 			int dop = 0;
-			bool index = (Int[0] == t.Int[0]);
-			int j = n >= t.n ? n : t.n;
-			BigInt s1 = (this)->AddCode(), s2(t.AddCode());
-			for (int i = 0; i <= SZ; i++) {
+			bool index = (fir.Int[0] == sec.Int[0]);
+			int j = fir.n >= sec.n ? fir.n : sec.n;
+			BigInt s1 = ~fir, s2=~sec;
+			for (int i = 0; i <= fir.SZ; i++) {
 				if (s1.Int[i] + s2.Int[i] + dop < 10) {
 					s1.Int[i] = s1.Int[i] + s2.Int[i] + dop;
 					dop = 0;
@@ -128,13 +164,13 @@ namespace Prog3a {
 			if (dop > 0 && index)
 				throw "Overflow";
 			if (!index) {
-				if ((this)->Large(t)) {
-					s1.Int[0] = Int[0];
+				if (fir>sec) {
+					s1.Int[0] = fir.Int[0];
 				}
-				else s1.Int[0] = t.Int[0];
+				else s1.Int[0] = sec.Int[0];
 			}
-			if (index)s1.Int[0] = Int[0];
-			s1 = s1.AddCode();
+			if (index)s1.Int[0] = fir.Int[0];
+			s1 = ~s1;
 			for (int i = j; i > 0; i--) {
 				if (s1.Int[i] != 0) {
 					s1.n = i;
@@ -149,25 +185,16 @@ namespace Prog3a {
 			return inc;
 		}
 	}
-
-	BigInt BigInt::Subtraction(BigInt t) const {
-		BigInt s2 = t, s1 = *this;
-		if (s2.Int[0] == 0) s2.Int[0] = 1;
-		else s2.Int[0] = 0;
-		s1 = s1.Sum(s2);
-		return s1;
-	}
-	BigInt BigInt::Inc() const
-	{
+	BigInt& BigInt::operator <<=(int pr){
 		try {
 			BigInt inc;
-			inc.n = n + 1;
+			inc.n = n + pr;
 			inc.Int[0] = Int[0];
-			if (Int[SZ] != 0)
+			if (Int[SZ-pr] != 0)
 				throw "Overflow";
-			inc.Int[1] = 0;
+			for (int i = 1; i <= pr; i++) inc.Int[i] = 0;
 			for (int i = n; i >= 1; i--)
-				inc.Int[i + 1] = Int[i];
+				inc.Int[i + pr] = Int[i];
 			return inc;
 		}
 		catch (const std::exception& msg) {
@@ -175,53 +202,48 @@ namespace Prog3a {
 			return *this;
 		}
 	}
-	BigInt BigInt::Dec() const
-	{
+	BigInt& BigInt::operator >>=(int pr) {
 		BigInt inc;
-		inc.n = n - 1;
+		if (n - pr > 0) inc.n = n - pr;
+		else return inc;
 		inc.Int[0] = Int[0];
-		if (n == 1) return inc;
-		for (int i = n; i >= 2; i--)
-			inc.Int[i - 1] = Int[i];
+		for (int i = n; i >= pr+1; i--)
+			inc.Int[i - pr] = Int[i];
 		return inc;
 	}
-
-	BigInt BigInt::InputStr() const {
+	std::istream& operator >>(std::istream& s, BigInt& t) {
 		try {
-			const char* ptr = "";
+			char ptr[t.SZ]="";
 			int n;
 			int len = 0;
-			std::string ss;
-			std::cin >> ss;
-			if (ss.std::string::length() > SZ + 1)
+			s >> ptr;
+			if (strlen(ptr) > t.SZ + 1)
 			{
 				std::cout << "Overflow. You enter too big number" << std::endl;
-				return *this;
 			}
-			ptr = ss.c_str();
 			std::cin.clear();
-			BigInt a(ptr);
-			return a;
-
+			t.Set(ptr);
 		}
 		catch (const std::exception& msg) {
 			std::cout << msg.what() << std::endl;
 		}
+		return s;
 	}
-	void BigInt::Print() const
-	{
-		if (Int[0] == 1)
-			std::cout << "-";
+	std::ostream& operator <<(std::ostream& s, const BigInt& t) {
+		if (t.Int[0] == 1)
+			s << "-";
 		bool k = false;
-		if (n == 1) {
-			if (Int[1] == 0) k = true;
+		if (t.n == 1) {
+			if (t.Int[1] == 0) k = true;
 		}
-		if (k) std::cout << 0;
+		if (k) s << 0;
 		else {
-			for (int i = n; i >= 1; i--) {
-				int t = Int[i];
-				std::cout << t;
+			for (int i = t.n; i >= 1; i--) {
+				int print = t.Int[i];
+				s << print;
 			}
 		}
+		return s;
 	}
+	
 }
