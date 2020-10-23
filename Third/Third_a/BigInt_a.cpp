@@ -1,101 +1,86 @@
-#include "BigInt.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "BigInt_a.h"
 #include <iostream>
 #include <string.h>
 
 namespace Prog3a {
-
-	BigInt::BigInt()
-	{
+	BigInt::BigInt() {
 		Int[0] = 0;
 		for (int i = 1; i < SZ + 1; ++i) Int[i] = 0;
 		n = 1;
 	}
-	BigInt::BigInt(long int x){
-		try {
-			long int a = abs(x);
-			while (a){
-				++n;
-				a /= 10;
-			}
-			if (x < 0) Int[0] = 1;
-			else Int[0]=0; 
+	BigInt::BigInt(long int x) {
+		if (x < 0) Int[0] = 1;
+		else Int[0] = 0;
+		long int a = abs(x);
+		int i = 1;
+		n = 0;
+		while (a) {
+			++n;
+			Int[i] = (a % 10);
+			a /= 10;
+			i++;
 			if (n > SZ)
-				throw "Overflow";
-			for (int i = 1; i <= n; i++) {
-				Int[i] = (a % 10);
-				a /= 10;
-			}
-			for (int i = SZ; i >= SZ - n + 1; i--)
-				Int[i] = 0;
+				throw std::runtime_error("Overflow");
 		}
-		catch (const std::exception & msg) {
-			std::cout << msg.what() << std::endl;
-		}
+		for (int i = SZ; i >= SZ - n + 1; i--) Int[i] = 0;
 	}
 	BigInt::BigInt(const char* str) {
-		try {
-			Set(str);
-		}
-		catch (std::exception& a) {
-			throw std::exception("Wrong data");
-		}
+		Set(str);
 	}
-	BigInt& BigInt::Set(const char* str){
-		try {
-			std::string STR = str;
-			if (str == nullptr)
-				throw "Nullptr";
-			int l = STR.std::string::length();
-			n = l;
-			int z=0;
-			if (str[0] == '-') {
-				Int[0] = 1;
+	BigInt& BigInt::Set(const char* str) {
+		std::string STR = str;
+		int l = STR.std::string::length();
+		n = l;
+		if (str[0] == '-') {
+			Int[0] = 1;
+			n--;
+		}
+		else Int[0] = 0;
+		if (n > SZ) {
+			throw std::runtime_error("Overflow");
+		}
+		int check = STR.std::string::find_first_not_of("-0123456789");
+		if (check >= 0) {
+			throw std::runtime_error("Incorrect data");
+		}
+		int z = 0, i = str[0] == '-' ? 1 : 0;
+		if ((str[0] == '-' && str[1] == '0') || str[0] == '0') {
+			while (str[i] == '0') {
+				i++;
 				z++;
-				n--;
 			}
-			else Int[0] = 0;
-			int pr1 = STR.std::string::find_first_not_of("0123456789");
-			if (pr1 > 0) {
+			if (i == l) {
 				Int[0] = 0;
-				throw "Incorrect data. Your number can begin only from - or 0-9 chars and contain 0-9 chars";
+				n = 1;
+				for (int i = 1; i < SZ + 1; ++i) Int[i] = 0;
+				return *this;
 			}
-			int i = 0;
-			i = l - 1;
-			bool tmp = true;
-			for (int k = 1; k <= n; k++) {
-				Int[k] = str[i]-'0';
-				i--;
-				if (tmp && Int[k] != 0)
-					tmp = false;
-			}
-			if (tmp)
-				Int[0] = 0;
-			for (int k = SZ; k >= n + 1; k--)
-				Int[k] = 0;
 		}
-		catch (const std::exception& msg) {
-				std::cout << msg.what() << std::endl;
-			}
+		n -= z;
+		i = l - 1;
+		for (int k = 1; k <= n; k++) {
+			Int[k] = str[i] - '0';
+			i--;
+		}
+		for (int k = SZ; k >= n + 1; k--) Int[k] = 0;
 		return *this;
-		}
-	
-	const BigInt BigInt::AddCode() const{
+	}
+	const BigInt BigInt::AddCode() const {
 		BigInt a;
 		if (Int[0] == 0)
 			return *this;
 		int pr = 1;
 		for (int i = 1; i <= SZ; i++) {
 			if (pr && Int[i] != 0) {
-					a.Int[i] = 10 - Int[i];
-					pr=0;
+				a.Int[i] = 10 - Int[i];
+				pr = 0;
 			}
 			else if (!pr)
 				a.Int[i] = 9 - Int[i];
 		}
+		a.n = n;
 		if (Int[1] == 0) a.Int[1] = 0;
-		a.Int[0] = 0;
+		a.Int[0] = Int[0];
 		return a;
 	}
 	bool BigInt::Large(const BigInt& t) const {
@@ -108,49 +93,48 @@ namespace Prog3a {
 			}
 		}
 	}
-	BigInt BigInt::Sum(const BigInt& t)const
-	{
-		try {
-			int dop = 0;
-			bool index = (Int[0] == t.Int[0]);
-			int j = n >= t.n ? n : t.n;
-			BigInt s1 = (this)->AddCode(), s2(t.AddCode());
-			for(int i = 0; i <= SZ; i++) {
-				if (s1.Int[i] + s2.Int[i] + dop < 10) {
-					s1.Int[i] = s1.Int[i] + s2.Int[i] + dop;
-					dop = 0;
-				}
-				else {
-					s1.Int[i] = s1.Int[i] + s2.Int[i] + dop - 10;
-					dop = 1;
-				}
+	BigInt BigInt::Sum(const BigInt& t)const {
+		int dop = 0;
+		bool index = (Int[0] == t.Int[0]);
+		int j = n >= t.n ? n : t.n;
+		BigInt s1 = (this)->AddCode(), s2(t.AddCode());
+		for (int i = 0; i < SZ; i++) {
+			if (s1.Int[i] + s2.Int[i] + dop < 10) {
+				s1.Int[i] = s1.Int[i] + s2.Int[i] + dop;
+				dop = 0;
 			}
-			if (dop > 0 && index)
-				throw "Overflow";
-			if (!index) {
-				if ((this)->Large(t)) {
-					s1.Int[0] = Int[0];
-				}
-				else s1.Int[0] = t.Int[0];
+			else {
+				s1.Int[i] = s1.Int[i] + s2.Int[i] + dop - 10;
+				dop = 1;
 			}
-			if (index)s1.Int[0] = Int[0];
-			s1 = s1.AddCode();
-			for (int i = j; i > 0; i--) {
-				if (s1.Int[i] != 0) {
-					s1.n = i;
-					break;
-				}
-			}
-			return s1;
 		}
-		catch (const std::exception& msg) {
-			std::cout << msg.what() << std::endl;
-			BigInt inc;
-			return inc;
+		if ((dop > 0) && index && ((Int[SZ] != 0) || (t.Int[SZ] != 0)))
+			throw std::runtime_error("Overflow!");
+		if (!index) {
+			if ((this)->Large(t)) {
+				s1.Int[0] = Int[0];
+			}
+			else if (t.Large(*this)) {
+				s1.Int[0] = t.Int[0];
+			}
+			else {
+				s1.Int[0] = 0;
+				s1.n = 1;
+				return s1;
+			}
 		}
+		else s1.Int[0] = Int[0];
+		s1 = s1.AddCode();
+		if (j < SZ) j += 1;
+		for (int i = j; i > 0; i--) {
+			if (s1.Int[i] != 0) {
+				s1.n = i;
+				break;
+			}
+		}
+		return s1;
 	}
-
-	BigInt BigInt::Subtraction(BigInt t) const{
+	BigInt BigInt::Subtraction(BigInt t) const {
 		BigInt s2 = t, s1 = *this;
 		if (s2.Int[0] == 0) s2.Int[0] = 1;
 		else s2.Int[0] = 0;
@@ -159,69 +143,69 @@ namespace Prog3a {
 	}
 	BigInt BigInt::Inc() const
 	{
-		try {
-			BigInt inc;
-			inc.n = n + 1;
-			inc.Int[0] = Int[0];
-			if (Int[SZ] != 0)
-				throw "Overflow";
-			inc.Int[1] = 0;
-			for (int i = n; i >= 1; i--)
-				inc.Int[i+1] = Int[i];
+		BigInt inc;
+		inc.n = n + 1;
+		if (n == 1 && Int[1] == 0) {
+			inc.n = 1;
 			return inc;
 		}
-		catch (const std::exception& msg) {
-			std::cout << msg.what() << std::endl;
-			return *this;
-		}
+		if (Int[SZ] != 0)
+			throw std::runtime_error("Overflow!");
+		inc.Int[0] = Int[0];
+		inc.Int[1] = 0;
+		for (int i = n; i >= 1; i--)
+			inc.Int[i + 1] = Int[i];
+		return inc;
 	}
 	BigInt BigInt::Dec() const
 	{
-			BigInt inc;
-			inc.n = n - 1;
-			inc.Int[0] = Int[0];
-			if (n == 1) return inc;
-			for (int i = n; i >= 2; i--)
-				inc.Int[i - 1] = Int[i];
+		BigInt inc;
+		inc.n = n - 1;
+		if (n == 1) {
+			inc.n = 1;
 			return inc;
+		}
+		inc.Int[0] = Int[0];
+		for (int i = n; i >= 2; i--)
+			inc.Int[i - 1] = Int[i];
+		return inc;
 	}
-
-	BigInt BigInt::InputStr() const{
-		try {
-			const char* ptr = "";
-			int n;
-			int len = 0;
-			std::string ss;
-			std::cin >> ss;
-			if (ss.std::string::length() > SZ + 1)
-			{
-				std::cout << "Overflow. You enter too big number" << std::endl;
-				return *this;
-			}
-			ptr = ss.c_str();
-			std::cin.clear();
-			BigInt a(ptr);
-			return a;
-		    
+	BigInt BigInt::InputStr() const {
+		const char* ptr = "";
+		int n;
+		std::string ss;
+		std::cin >> ss;
+		if (ss.std::string::length() > SZ + 1) {
+			throw std::runtime_error("Overflow!");
 		}
-		catch (const std::exception& msg) {
-			std::cout << msg.what() << std::endl;
-		}
+		ptr = ss.c_str();
+		std::cin.clear();
+		BigInt a(ptr);
+		return a;
 	}
 	void BigInt::Print() const
 	{
 		if (Int[0] == 1)
 			std::cout << "-";
 		bool k = false;
-		if (n == 1) {
-			if (Int[1] == 0) k = true;
-		}
-		if (k) std::cout << 0;
+		if (n == 1 && Int[1] == 0) std::cout << 0;
 		else {
 			for (int i = n; i >= 1; i--) {
 				int t = Int[i];
 				std::cout << t;
 			}
 		}
+	}
+	int BigInt::ToInt() const {
+		int i = 0;
+		int pow = 1;
+		if (n > 8)
+			throw - 1;
+		for (int k = 1; k <= n; k++) {
+			i += Int[k] * pow;
+			pow *= 10;
+		}
+		i = Int[0] == 0 ? i : -i;
+		return i;
 	}
 }

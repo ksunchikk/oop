@@ -21,11 +21,13 @@ namespace Prog3b {
 		const BigInt operator~() const;
 		BigInt& operator <<=(int);
 		BigInt& operator >>=(int);
-		friend bool operator >(const BigInt&, const BigInt&);
-		friend bool operator <(const BigInt&, const BigInt&);
-		friend bool operator ==(const BigInt&, const BigInt&);
+		bool operator >(const BigInt&);
+		bool operator <(const BigInt&);
+		bool operator ==(const BigInt&);
 		friend std::ostream& operator <<(std::ostream&, const BigInt&);
 		friend std::istream& operator >>(std::istream&, BigInt&);
+		bool CompareAbs(const BigInt&) const;
+		operator int() const;
 	};
 }
 #endif

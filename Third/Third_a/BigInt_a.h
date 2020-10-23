@@ -21,6 +21,7 @@ namespace Prog3a {
 		BigInt Subtraction(BigInt) const;
 		BigInt InputStr() const;
 		void Print() const;
+		int ToInt() const;
 	};
 	
 }

@@ -14,6 +14,15 @@ int main() {
 		std::cout << "Second: ";
 		std::cin >> s;
 		std::cout << std::endl;
+		if (f > s) {
+			std::cout << "First number is bigger than second" << std::endl;
+		}
+		if (f < s) {
+			std::cout << "First number is smaller than second" << std::endl;
+		}
+		if (f == s) {
+			std::cout << "First number is equal for second" << std::endl;
+		}
 		try {
 			BigInt Sum = f + s;
 			std::cout << f << "+(" << s << ")=" << Sum << std::endl;
@@ -24,6 +33,8 @@ int main() {
 		try {
 			BigInt Sub = f - s;
 			std::cout << f << "-(" << s << ")=" << Sub << std::endl;
+			std::cout << f << "+(" << s << "+ 754 + 8765 =";
+			Sub = f + s + 754 + "8765";
 			std::cout << Sub << std::endl;
 		}
 		catch (const std::exception& msg) {
@@ -33,7 +44,9 @@ int main() {
 		std::cin >> id;
 		if (!id) {
 			try {
-				int x = 1;
+				std::cout << "Enter number of digits for increasing" << std::endl;
+				int x;
+				std::cin >> x;
 				BigInt f1=f;
 				f1 <<= x;
 				std::cout << "Recived number: " << f1 << std::endl;
@@ -43,7 +56,9 @@ int main() {
 			}
 		}
 		else {
-			int x = 1;
+			std::cout << "Enter number of digits for decreasing" << std::endl;
+			int x;
+			std::cin >> x;
 			BigInt f1 = f;
 			f1 >>= x;
 			std::cout << "Recived number: " << f1 << std::endl;
@@ -52,7 +67,9 @@ int main() {
 		std::cin >> id;
 		if (!id) {
 			try {
-				int x = 1;
+				std::cout << "Enter number of digits for increasing" << std::endl;
+				int x;
+				std::cin >> x;
 				BigInt s1 = s;
 				s1 <<= x;
 				std::cout << "Recived number: " << s1 << std::endl;
@@ -62,7 +79,9 @@ int main() {
 			}
 		}
 		else {
-			int x = 1;
+			std::cout << "Enter number of digits for decreasing" << std::endl;
+			int x;
+			std::cin >> x;
 			BigInt s1 = s;
 			s1 >>= x;
 			std::cout << "Recived number: " << s1 << std::endl;
