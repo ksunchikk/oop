@@ -33,9 +33,9 @@ int main() {
 		try {
 			BigInt Sub = f - s;
 			std::cout << f << "-(" << s << ")=" << Sub << std::endl;
-			std::cout << f << "+(" << s << "+ 754 + 8765 =";
-			Sub = f + s + 754 + "8765";
-			std::cout << Sub << std::endl;
+			/*std::cout << f << "+(" << s << "+ 754 + 8765 =";
+			Sub = ((f + s) + 754) + "8765";
+			std::cout << Sub << std::endl;*/
 		}
 		catch (const std::exception& msg) {
 			std::cout << msg.what() << std::endl;
@@ -60,7 +60,7 @@ int main() {
 			int x;
 			std::cin >> x;
 			BigInt f1 = f;
-			f1 >>= x;
+			f1=f1 >>= x;
 			std::cout << "Recived number: " << f1 << std::endl;
 		}
 		std::cout << "Enter 0 to increase second number or 1 to decrease" << std::endl;

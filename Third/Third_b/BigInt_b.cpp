@@ -67,14 +67,14 @@ namespace Prog3b {
 		for (int k = SZ; k >= n + 1; k--) Int[k] = 0;
 		return *this;
 	}
-	BigInt BigInt::operator ()(long int x) const {
+	/*BigInt BigInt::operator ()(long int x) const {
 		BigInt a(x);
 		return a;
 	}
-	BigInt BigInt::operator ()(const char* str) const {
+	//BigInt BigInt::operator ()(const char* str) const {
 		BigInt a(str);
 		return a;
-	}
+	}*/
 	const BigInt BigInt::operator~() const {
 		BigInt a;
 		if (Int[0] == 0)
@@ -110,8 +110,9 @@ namespace Prog3b {
 				if (t.Int[i] > Int[i]) return false;
 			}
 		}
+		return false;
 	}
-	BigInt operator +(const BigInt& fir, const BigInt& sec) {
+	BigInt operator +(const BigInt fir, const BigInt sec) {
 		int dop = 0;
 		bool index = (fir.Int[0] == sec.Int[0]);
 		int j = fir.n >= sec.n ? fir.n : sec.n;
@@ -184,33 +185,33 @@ namespace Prog3b {
 		return true;
 	}
 	BigInt& BigInt::operator <<=(int pr) {
-		BigInt inc;
-		inc.n = n + pr;
 		if (n == 1 && Int[1] == 0) {
-			inc.n = 1;
-			return inc;
+			n = 1;
+			return *this;
 		}
-		inc.Int[0] = Int[0];
+		Int[0] = Int[0];
 		if (Int[SZ - pr] != 0)
 			throw std::runtime_error("Overflow");
-		for (int i = 1; i <= pr; i++) inc.Int[i] = 0;
-		for (int i = n; i >= 1; i--)
-			inc.Int[i + pr] = Int[i];
-		return inc;
+		for (int i = n; i >= 1; i--) Int[i + pr] = Int[i];
+		for (int i = 1; i <= pr; i++) Int[i] = 0;
+		n = n + pr;
+		return *this;
 	}
-	BigInt& BigInt::operator >>=(int pr) {
-		BigInt inc;
-		if (n - pr > 0) inc.n = n - pr;
-		else return inc;
-		inc.Int[0] = Int[0];
-		for (int i = n; i >= pr + 1; i--)
-			inc.Int[i - pr] = Int[i];
-		return inc;
+	BigInt BigInt::operator >>=(int pr) {
+		if (!(n - pr > 0)) {
+			for (int i = 0; i <= n; i++) {
+				Int[i] = 0;
+			}
+			n = 1;
+			return *this;
+		}
+		for (int i = 1; i <= n; i++) Int[i] = Int[i+pr];
+		n = n - pr;
+		return *this;
 	}
 	std::istream& operator >>(std::istream& s, BigInt& t) {
 		try {
 			char ptr[t.SZ] = "";
-			int n;
 			int len = 0;
 			s >> ptr;
 			if (strlen(ptr) > t.SZ + 1)
@@ -228,11 +229,9 @@ namespace Prog3b {
 	std::ostream& operator <<(std::ostream& s, const BigInt& t) {
 		if (t.Int[0] == 1)
 			s << "-";
-		bool k = false;
 		if (t.n == 1) {
-			if (t.Int[1] == 0) k = true;
+			if (t.Int[1] == 0) s << 0;
 		}
-		if (k) s << 0;
 		else {
 			for (int i = t.n; i >= 1; i--) {
 				int print = t.Int[i];
@@ -244,7 +243,7 @@ namespace Prog3b {
 	BigInt::operator int() const {
 		int i = 0;
 		int pow = 1;
-		if (n > 8)
+		if (n > 50)
 			throw - 1;
 		for (int k = 1; k <= n; k++) {
 			i += Int[k] * pow;
