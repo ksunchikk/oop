@@ -67,14 +67,7 @@ namespace Prog3b {
 		for (int k = SZ; k >= n + 1; k--) Int[k] = 0;
 		return *this;
 	}
-	/*BigInt BigInt::operator ()(long int x) const {
-		BigInt a(x);
-		return a;
-	}
-	//BigInt BigInt::operator ()(const char* str) const {
-		BigInt a(str);
-		return a;
-	}*/
+	
 	const BigInt BigInt::operator~() const {
 		BigInt a;
 		if (Int[0] == 0)
@@ -150,14 +143,20 @@ namespace Prog3b {
 		return s1;
 	}
 	bool BigInt::operator >(const BigInt& second) {
-		if (Int[0] == 1 && second.Int[0] == 0) return false;
-		if (Int[0] == 0 && second.Int[0] == 1) return true;
+		if (Int[0] == '1' && second.Int[0] == 0) return false;
+		if (Int[0] == '0' && second.Int[0] == 1) return true;
 		if (n > second.n) return true;
 		if (n < second.n) return false;
-		if (second.n == n) {
+		if (second.n == n && Int[0] == 0) {
 			for (int i = n; i >= 1; i--) {
 				if (Int[i] > second.Int[i]) return true;
 				if (second.Int[i] > Int[i]) return false;
+			}
+		}
+		if (second.n == n && Int[0] == 1) {
+			for (int i = n; i >= 1; i--) {
+				if (Int[i] > second.Int[i]) return false;
+				if (second.Int[i] > Int[i]) return true;
 			}
 		}
 		return false;
@@ -167,22 +166,29 @@ namespace Prog3b {
 		if (Int[0] == 0 && second.Int[0] == 1) return false;
 		if (n < second.n) return true;
 		if (n > second.n) return false;
-		if (second.n == n) {
+		if (second.n == n && Int[0] == 0) {
 			for (int i = n; i >= 1; i--) {
 				if (Int[i] < second.Int[i]) return true;
 				if (second.Int[i] < Int[i]) return false;
+			}
+		}
+		if (second.n == n && Int[0] == 1) {
+			for (int i = n; i >= 1; i--) {
+				if (Int[i] < second.Int[i]) return false;
+				if (second.Int[i] < Int[i]) return true;
 			}
 		}
 		return false;
 	}
 	bool BigInt::operator ==(const BigInt& first) {
 		if (n != first.n) return false;
-		if (first.n == n) {
-			for (int i = n; i >= 1; i--) {
+		if (first.n == n && Int[0] == first.Int[0]) {
+			for (int i = n; i >= 0; i--) {
 				if (Int[i] != first.Int[i]) return false;
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	BigInt& BigInt::operator <<=(int pr) {
 		if (n == 1 && Int[1] == 0) {

@@ -13,8 +13,6 @@ namespace Prog3b {
 		BigInt(long int x);
 		BigInt(const char* str);
 		BigInt& Set(const char* str);
-		BigInt operator ()(long int) const;
-		BigInt operator ()(const char*) const;
 		friend BigInt operator +(const BigInt, const BigInt);
 		friend BigInt operator -(const BigInt& first, const BigInt& second) { return first + (-second); };
 		BigInt operator -() const;

@@ -33,9 +33,6 @@ int main() {
 		try {
 			BigInt Sub = f - s;
 			std::cout << f << "-(" << s << ")=" << Sub << std::endl;
-			/*std::cout << f << "+(" << s << "+ 754 + 8765 =";
-			Sub = ((f + s) + 754) + "8765";
-			std::cout << Sub << std::endl;*/
 		}
 		catch (const std::exception& msg) {
 			std::cout << msg.what() << std::endl;
