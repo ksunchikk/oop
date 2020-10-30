@@ -1,4 +1,4 @@
-#ifndef _BIG_DEC_
+﻿#ifndef _BIG_DEC_
 #define _BIG_DEC_
 #include <iostream>
 

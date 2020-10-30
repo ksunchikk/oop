@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "..\laba 3c\BigInt_c.h"
 
-
 using namespace Prog3c;
 
 TEST(Constructors, Defaultconstructor) {
@@ -23,8 +22,6 @@ TEST(Constructors, String_constructor) {
     ASSERT_EQ(-34, (int)A);
     char check5[] = "aaa";
     ASSERT_ANY_THROW(BigInt C(check5));
-    char check6[] = "1234567898765432345678998765434567890987654323456789098765434567898765456789";
-    ASSERT_ANY_THROW(BigInt D(check6));
 }
 TEST(Constructors, Int_constructor) {
     BigInt A(9876);
@@ -70,9 +67,6 @@ TEST(Operators, Operator_addition) {
     ASSERT_EQ(-76, (int)Sum6);
     Sum6 = BigInt(35) + A6 + B6 + BigInt("74") + BigInt(12);
     ASSERT_EQ(45, (int)Sum6);
-    BigInt A7("1");
-    BigInt B7("99999999999999999999999999999999999999999999999");
-    ASSERT_ANY_THROW(A7 + (B7));
 }
 TEST(Operators, Operator_subtruction) {
     BigInt A1("123");
@@ -105,9 +99,6 @@ TEST(Operators, Operator_subtruction) {
     ASSERT_EQ(76, (int)Sub7);
     Sub6 = BigInt(35) - A7 - B7 + BigInt("74") + BigInt(12);
     ASSERT_EQ(197, (int)Sub6);
-   /* BigInt A8("1");
-    BigInt B8("-99999999999999999999999999999999999999999999999");
-    ASSERT_ANY_THROW(A8 - (B8));*/
 }
 TEST(Operators, Operator_unminus) {
     BigInt A("0");
@@ -127,8 +118,6 @@ TEST(Operators, Operator_move_left) {
     BigInt C("-864");
     C <<= 1;
     ASSERT_EQ(-8640, (int)C);
-    BigInt D("11111111111111111111111111111111111111111111111");
-    ASSERT_ANY_THROW(D <<= 5);
 }
 TEST(Operators, Operator_move_right) {
     BigInt A("0");
