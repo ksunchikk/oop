@@ -16,31 +16,25 @@ int main() {
     std::cout << "   1. '+' - to sum" << std::endl << "   2. '^' - to substracting" << std::endl << "   3. '*' - to increase number by one digit" << std::endl << "   4. '/' - to decrease number by one digit" <<std::endl<< "   5. '=' - to get result"<<std::endl;
     std::cout << "----------------------Let's start calculations!------------------------" << std::endl;
     while (!feof(stdin)) {
-        std::getline(std::cin,x);
+        std::getline(std::cin, x);
         int i = 0;
-        int l = x.length();
-        while (x[i] == ' ' && x[i] != '\0') {
+        int flag = 0;
+        for (char& c : x) {
+            if (c >= '0' && c <= '9') {
+                str.append(x, i, 1);
+                flag = 1;
+            }
             i++;
-            l--;
-        }
-        while (l > 0) {
-            char c='a';
-            int j = i;
-            while (x[i] != ' ' && x[i]!='\0') {
-                i++;
-                l--;
-            }
-            int m = i;
-            while (x[i] == ' ' && x[i] != '\0') {
-                i++;
-                l--;
-            }
-            str.append(x, j, m - j);
-            if (str.find("+^*/=")) c = str[0];
             switch (c) {
             case EOF: break;
             case '\n':
-            case ' ': break;
+            case ' ': {
+                if (flag == 1) {
+                flag = -1;
+                break;
+            }
+                 else break;
+            }
             case '=': {std::cout << "result:"; s.PrinstStack(); break; }
             case '+': {
                 try {
@@ -68,11 +62,13 @@ int main() {
                 break;
             }
             case '/': s.push1(s.pop().Dec10()); break;
-            default:
-                s.push(str.c_str());
-                break;
+            default: break;
             }
-            str.clear();
+            if (flag == -1) {
+                s.push(str.c_str());
+                str.clear();
+                flag = 0;
+            }
         }
         x.clear();
     }
