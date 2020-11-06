@@ -19,6 +19,10 @@ int main() {
         std::getline(std::cin,x);
         int i = 0;
         int l = x.length();
+        while (x[i] == ' ' && x[i] != '\0') {
+            i++;
+            l--;
+        }
         while (l > 0) {
             char c='a';
             int j = i;
@@ -26,11 +30,12 @@ int main() {
                 i++;
                 l--;
             }
-            str.append(x,j, i-j);
+            int m = i;
             while (x[i] == ' ' && x[i] != '\0') {
                 i++;
                 l--;
             }
+            str.append(x, j, m - j);
             if (str.find("+^*/=")) c = str[0];
             switch (c) {
             case EOF: break;
