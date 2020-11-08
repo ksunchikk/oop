@@ -20,7 +20,7 @@ int main() {
         int i = 0;
         int flag = 0;
         for (char& c : x) {
-            if (c >= '0' && c <= '9') {
+            if (c >= '0' && c <= '9' || c=='-') {
                 str.append(x, i, 1);
                 flag = 1;
             }
