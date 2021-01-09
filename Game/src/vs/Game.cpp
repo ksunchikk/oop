@@ -89,13 +89,19 @@ int main(){
 	int traptime=0;
 	bool strat_chosen = false;
 	//MagicTower
-	RenderWindow Win(VideoMode(1200, 900), "TOWER DEFENSE");
+	srand(3);
+	Text pur;
+	pur.setFont(font);
+	pur.setPosition(40, 20);
+	pur.setCharacterSize(40);
+	pur.setFillColor(sf::Color::Red);
 	Text won;
 	won.setFont(font);
 	won.setPosition(350, 300);
 	won.setCharacterSize(100);
 	won.setFillColor(sf::Color(231, 84, 128));
 	won.setString("ITS A TRAP!");
+	RenderWindow Win(VideoMode(1200, 900), "TOWER DEFENSE");
 	while (Win.isOpen()) {
 		o_t = std::clock();
 		curtime = o_t / 1000;
@@ -282,7 +288,6 @@ int main(){
 					}
 				}
 		}
-		
 			for (int i = 0; i < 2; i++) {
 				m.den[i]->putNewEnemy(SCENE, curtime);
 				gm.putNewEnemy(SCENE, MT);
@@ -295,6 +300,9 @@ int main(){
 			gm.draw(Win);
 			h = m.castle->getcurhealth();
 			G_CASTLE.hp.setString(std::to_string(h));
+			h = m.castle->getpurse();
+			pur.setString(std::to_string(h));
+			Win.draw(pur);
 			G_CASTLE.draw(Win);
 			G_DEN_1.draw(Win);
 			G_DEN_2.draw(Win);
