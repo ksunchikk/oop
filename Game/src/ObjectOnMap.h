@@ -3,6 +3,8 @@
 #ifndef _OBGECTONMAP_H
 #define _OBGECTONMAP_H
 #include <string>
+//#include "Magic.h"
+#include <vector>
 namespace game {
     class ObjectOnMap {
     public:
@@ -17,6 +19,7 @@ namespace game {
         double getX()const { return x; }
         double getY()const { return y; }
         Type getOType()const { return Otype; }
+        //virtual std::vector <Magic*>& getVecMagic() = 0;
         void setX(double n_x) { x = n_x; }
         void setY(double n_y) { y = n_y; }
         void setOType(Type n_type) { Otype = n_type; }

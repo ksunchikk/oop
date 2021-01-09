@@ -20,7 +20,7 @@ namespace game {
         Magic* getMagic()const { return magic; }
         void setMagic(Magic* n_magic){ magic = n_magic; }
         void addSpell(Enemy& enemy);
-        void addDamage(Enemy enemy);
+        void addDamage(Enemy& enemy, double n_time) override;
     };
 }
 #endif 

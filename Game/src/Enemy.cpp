@@ -36,7 +36,7 @@ namespace game {
         if (n_type == TypeOfLevel::Simple) {
             magic = {};
             cost = 2;
-            speed = 10;
+            speed = 15;
             type = n_type;
             maxhp = 10;
             hp = maxhp;
@@ -60,25 +60,11 @@ namespace game {
     }
     Enemy::~Enemy() {
         while (!magic.empty()) {
-            std::vector<Magic*>::iterator i = magic.end()--;
-            delete (*i);
+            std::vector<Magic*>::iterator i = magic.end()-1;
             magic.erase(i);
         }
     }
-    Enemy::Enemy(TypeOfLevel n_type, double n_x, double n_y,double n_speed, int n_cost, double n_time, std::vector<Magic*> n_magic, double n_weakness, bool n_alive, double n_hp, int n_maxhp): ObjectOnMap(Type::ENEMY, n_x, n_y) {
-        if (n_time < 0) throw std::runtime_error("Wrong data! Start time info error!");
-        starttime = n_time;
-        type = n_type;
-        if (n_speed < 0) throw std::runtime_error("Wrong data! Speed info error!");
-        speed = n_speed;
-        if (n_cost < 0) throw std::runtime_error("Wrong data! Cost info error!");
-        cost = n_cost;
-        magic = n_magic;
-        weakness = n_weakness;
-        hp = n_hp;
-        maxhp = n_maxhp;
-        alive = n_alive;
-    }
+    
     int Enemy::getMagicInfo() {
         std::vector<Magic*>::iterator i = this->begin();
         std::vector<Magic*>::iterator j = this->end()++;
@@ -105,38 +91,43 @@ namespace game {
         magic.push_back(new Magic(n_magic));
     }
     void Enemy::updateEnemyWithMagic(double n_time) {
-        std::vector<Magic*>::iterator i = begin();
-        std::vector<Magic*>::iterator j = end()++;
+        std::vector<Magic*>::iterator i = magic.begin();
+        std::vector<Magic*>::iterator j = magic.end();
         while (i != j) {
-            if ((*i)->getTime() <= 0) {
-                if ((*i)->type == Magic::TypeOfMagic::SLOWDOWN) {
-                    speed += (speed * (*i)->getPower() * 0.05);
-                }
-                else if ((*i)->type == Magic::TypeOfMagic::WEAKNESS) {
-                    weakness -= (*i)->getPower()*0.05;
-                }
-                delete (&i);
-                magic.erase(i);
-                continue;
-            }
             if ((*i)->type == Magic::TypeOfMagic::SLOWDOWN) {
                 if ((*i)->getAccept() == false) {
-                    speed -= (speed*(*i)->getPower() * 0.05);
+                    speed -= (speed*(*i)->getPower() * 0.005);
                     (*i)->setAccept(true);
-                    (*i)->setTime((*i)->getTime() - n_time);
+                    (*i)->setTime((*i)->getTime() + n_time);
                 }
-                else (*i)->setTime((*i)->getTime() - n_time);
+                else (*i)->setTime((*i)->getTime() + n_time);
             }
             else if ((*i)->type == Magic::TypeOfMagic::WEAKNESS) {
                 if ((*i)->getAccept() == false) {
                     weakness += (*i)->getPower()*0.05;
                     (*i)->setAccept(true);
                 }
-                (*i)->setTime((*i)->getTime() - n_time);
+                (*i)->setTime((*i)->getTime() + n_time);
             }
             else if ((*i)->type == Magic::TypeOfMagic::POISONING) {
                 hp = (*i)->getPower() * n_time * 0.05;
-                (*i)->setTime((*i)->getTime() - n_time);
+                (*i)->setTime((*i)->getTime() + n_time);
+            }
+            i++;
+        }
+        if (magic.begin() != magic.end()) {
+            std::vector<Magic*>::iterator ii = magic.begin();
+            for (ii; ii != magic.end(); ii++) {
+                if ((*ii)->getTime() >= (*ii)->getMaxTime()) {
+                    if ((*ii)->type == Magic::TypeOfMagic::SLOWDOWN) {
+                        speed += (speed * (*ii)->getPower() * 0.05);
+                    }
+                    else if ((*ii)->type == Magic::TypeOfMagic::WEAKNESS) {
+                        weakness -= (*ii)->getPower() * 0.05;
+                    }
+                    magic.erase(ii);
+                    break;
+                }
             }
         }
         

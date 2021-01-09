@@ -15,6 +15,7 @@ namespace game {
         enum class TypeOfMagic {POISONING, WEAKNESS, SLOWDOWN};
         TypeOfMagic type;
         Magic(int n_maxtime = 10, TypeOfMagic n_type = TypeOfMagic::POISONING, double n_pow=10, bool n_accep=false, double n_time=0);
+        ~Magic(){}
         virtual int getMaxTime()const { return maxtime; }
         virtual TypeOfMagic getType() const { return type; }
         virtual double getTime()const { return timeleft; }

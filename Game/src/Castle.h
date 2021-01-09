@@ -12,7 +12,7 @@ namespace game {
         double curhealth;
         int maxhealth;
     public:
-        Castle(int nPurse=100, double nCur = 100, int maxHealth = 100, bool nAlive=true, double n_x=0,double n_y=0, std::string n_name="");
+        Castle(int nPurse=100, double nCur = 100, int maxHealth = 100, bool nAlive=true, double n_x=0,double n_y=0);
         Castle(const Castle&);
         Castle(Castle&&);
         ~Castle() {};

@@ -16,13 +16,14 @@ namespace game{
         Enemy(Enemy&&);
         Enemy& operator =(const Enemy& n_enem);
         Enemy(TypeOfLevel n_type, double n_time=0, double n_x=0, double n_y=0);
-        Enemy(TypeOfLevel n_type, double n_x = 0, double n_y = 0, double n_speed = 10, int n_cost = 2, double n_time = 0, std::vector<Magic*> n_magic = {}, double n_weakness = 1,bool n_alive=true,double n_hp=10,int n_maxhp=10);
         TypeOfLevel getTypeOfLevel()const { return type; }
         double getSpeed()const { return speed; }
         int getCost()const { return cost; }
         double getTime()const { return starttime; }
-        std::vector<Magic*> getMagic()const { return magic; }
+        std::vector<Magic*>& getVecMagic() { return magic; }
         int getMagicInfo();
+        double getWeakness() { return weakness; };
+        void setWeak(double w) { weakness = w; }
         void setCost(int n_cost);
         void setSpeed(int n_speed);
         void setTime(double n_time);

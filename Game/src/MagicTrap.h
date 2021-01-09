@@ -13,7 +13,8 @@ namespace game {
         double area;
         Magic* magic=nullptr;
     public:
-        MagicTrap(double n_area = 5, int n_cost = 20, Magic::TypeOfMagic n_type= Magic::TypeOfMagic::POISONING);
+        double lastshot = 0;
+        MagicTrap(Magic::TypeOfMagic n_type = Magic::TypeOfMagic::POISONING,double n_x=0, double n_y=0, double n_area = 120, int n_cost = 30);
         MagicTrap(const MagicTrap&);
         MagicTrap(MagicTrap&&) noexcept;
         ~MagicTrap();

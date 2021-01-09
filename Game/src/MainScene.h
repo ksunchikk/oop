@@ -5,10 +5,8 @@
 namespace game{
 class MainScene {
     public:
-        Castle* castle;
+        Castle* castle = nullptr;
         std::vector<Enemy*> enemies;
-        
-
-
 };
 }
+

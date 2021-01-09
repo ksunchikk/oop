@@ -18,8 +18,7 @@ namespace game {
     }
     Den::~Den() {
         while (!Enemies.empty()) {
-            std::vector<Enemy>::iterator i = Enemies.end()--;
-            delete (&i);
+            std::vector<Enemy>::iterator i = Enemies.end()-1;
             Enemies.erase(i);
         }
     }
@@ -31,11 +30,12 @@ namespace game {
     }
     void Den::putNewEnemy(MainScene& n_scene, double n_time) {
         std::vector<Enemy>::iterator i = Enemies.begin();
-        std::vector<Enemy>::iterator j = Enemies.end()++;
+        std::vector<Enemy>::iterator j = Enemies.end();
         while (i != j) {
             double t = (i->getTime());
             if (t <= n_time) {
                 n_scene.enemies.push_back(&*i);
+                (*i).Enemy::setTime(10000000);
             }
             i++;
         }

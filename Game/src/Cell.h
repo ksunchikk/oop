@@ -16,12 +16,14 @@ namespace game {
 		double x;
 		double y;
 		bool road = 0;
+		bool isChoice;
+		int t_choice;
 	public:
 		enum TypeOfCell{FOREST,LEA,ROAD};
 		enum State{C_B_T, C_B_TR, N_B_T, N_B_TR, N_B};
 		State state;
 		TypeOfCell type;
-		Cell(TypeOfCell n_type, double n_x = 0, double n_y = 0);
+		Cell(TypeOfCell n_type=FOREST, double n_x = 0, double n_y = 0, bool n_c = false, int n_t = 1);
 		Cell(const Cell&);
 		Cell(Cell&&);
 	    ~Cell();

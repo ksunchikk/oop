@@ -3,7 +3,7 @@
 #include "Castle.h"
 #include<iostream>
 namespace game {
-	Castle::Castle(int nPurse, double nCur, int maxHealth, bool nAlive, double n_x, double n_y, std::string n_name): ObjectOnMap(Type::CASTLE,n_x,n_y) {
+	Castle::Castle(int nPurse, double nCur, int maxHealth, bool nAlive, double n_x, double n_y): ObjectOnMap(Type::CASTLE,n_x,n_y) {
 		if (nPurse < 0) {
 			throw std::runtime_error("Wrong data! Purse info error!");
 		}
